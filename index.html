@@ -606,7 +606,7 @@
             font-size: 0.825rem;
             color: var(--text-muted);
         }
-        .import-country .flag { font-size: 1.1rem; }
+        .import-country .flag { width: 28px; height: 20px; object-fit: cover; border-radius: 3px; flex-shrink: 0; }
 
         /* ── TESTIMONIALS ── */
         #testimonials { background: var(--surface); }
@@ -952,19 +952,195 @@
         @media (max-width: 768px) {
             section { padding: 4rem 1.25rem; }
             nav { padding: 1rem 1.25rem; }
-            .nav-links, .nav-phone { display: none; }
+            /* Mobile nav: show phone, hide desktop links & CTA button */
+            .nav-links {
+                display: none;
+                position: fixed;
+                inset: 0;
+                background: rgba(10,10,10,0.97);
+                backdrop-filter: blur(20px);
+                -webkit-backdrop-filter: blur(20px);
+                z-index: 998;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                gap: 0;
+                padding: 4rem 0 2rem;
+                list-style: none;
+            }
+            .nav-links.mobile-open { display: flex; }
+            .nav-links.mobile-open li { width: 100%; text-align: center; border-bottom: 1px solid var(--border); }
+            .nav-links.mobile-open a { display: block; padding: 1.1rem 2rem; font-size: 1rem; color: var(--text); letter-spacing: 0.06em; }
+            .nav-links.mobile-open a:hover { color: var(--gold); background: rgba(201,168,76,0.05); }
+            .nav-phone { font-size: 0.78rem; }
+            .nav-right .btn { display: none; }
             .burger { display: flex; }
+            .burger span { transition: all 0.3s; }
+            .burger.open span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+            .burger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+            .burger.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+            /* Sections */
             .cars-grid, .adv-grid, .test-grid { grid-template-columns: 1fr; }
             .catalog-header { flex-direction: column; align-items: flex-start; gap: 1.25rem; }
-            .hero-actions { flex-direction: column; }
-            .hero-actions .btn { width: fit-content; }
+            .hero-actions { flex-direction: column; align-items: flex-start; }
+            .hero-actions .btn { width: auto; }
+            .about-grid, .import-grid, .contact-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+            .about-badge { right: 0; bottom: -1rem; }
+            .about-text { padding-left: 0; }
             .map-card { display: none; }
             .footer-grid { grid-template-columns: 1fr; gap: 2rem; }
             .footer-bottom { flex-direction: column; gap: 1rem; text-align: center; }
-            .form-row { grid-template-columns: 1fr; }
             .stat-item { border-right: none; border-bottom: 1px solid var(--border); padding: 1.25rem; }
             .stat-item:last-child { border-bottom: none; }
+            .social-cards-grid { grid-template-columns: 1fr 1fr; gap: 0.75rem; }
         }
+
+        @media (max-width: 480px) {
+            section { padding: 3rem 1rem; }
+            nav { padding: 0.875rem 1rem; }
+            .hero-title { font-size: 2.8rem !important; }
+            .section-title { font-size: 1.75rem; }
+            .social-cards-grid { grid-template-columns: 1fr; }
+            .about-features { grid-template-columns: 1fr; }
+            .import-steps { gap: 1.25rem; }
+            .stats-grid { grid-template-columns: 1fr 1fr; }
+        }
+
+        /* ── CAROUSEL ── */
+        .carousel-wrapper {
+            position: relative;
+            overflow: hidden;
+            aspect-ratio: 16/10;
+        }
+        .carousel-track {
+            display: flex;
+            height: 100%;
+            transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        .carousel-slide {
+            min-width: 100%;
+            flex-shrink: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: brightness(0.88);
+            display: block;
+        }
+        .car-card:hover .carousel-slide { filter: brightness(0.95); }
+        .carousel-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(10,10,10,0.65);
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255,255,255,0.12);
+            color: var(--text);
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.3rem;
+            line-height: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 5;
+            transition: background 0.25s, border-color 0.25s, opacity 0.25s;
+            opacity: 0;
+        }
+        .car-card:hover .carousel-btn { opacity: 1; }
+        .carousel-btn:hover { background: var(--gold); color: #0a0a0a; border-color: var(--gold); }
+        .carousel-prev { left: 0.55rem; }
+        .carousel-next { right: 0.55rem; }
+        @media (hover: none) { .carousel-btn { opacity: 0.85; } }
+        .carousel-dots {
+            position: absolute;
+            bottom: 0.6rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 0.3rem;
+            z-index: 5;
+        }
+        .carousel-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.4);
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            transition: background 0.25s, width 0.25s;
+        }
+        .carousel-dot.active { background: var(--gold); width: 16px; border-radius: 3px; }
+
+        /* Car description */
+        .car-description {
+            color: var(--text-muted);
+            font-size: 0.815rem;
+            line-height: 1.7;
+            margin-bottom: 1rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        /* ── SOCIAL CONTACT ── */
+        .social-contact-wrap {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 7px;
+            padding: 2.5rem;
+        }
+        .social-contact-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+        .social-contact-sub {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            line-height: 1.75;
+            margin-bottom: 2rem;
+        }
+        .social-cards-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+        .soc-card {
+            display: flex;
+            align-items: center;
+            gap: 0.875rem;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1rem 1.1rem;
+            text-decoration: none;
+            transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+            min-height: 64px;
+        }
+        .soc-card:hover {
+            border-color: rgba(201,168,76,0.5);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.35);
+        }
+        .soc-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .soc-icon.youtube { background: rgba(255,50,50,0.12); color: #ff4444; }
+        .soc-icon.tiktok { background: rgba(255,255,255,0.07); color: var(--text); }
+        .soc-icon.telegram { background: rgba(38,165,228,0.12); color: #26A5E4; }
+        .soc-icon.instagram { background: rgba(225,48,108,0.12); color: #E1306C; }
+        .soc-name { font-weight: 600; font-size: 0.875rem; color: var(--text); margin-bottom: 0.1rem; }
+        .soc-handle { color: var(--text-muted); font-size: 0.75rem; }
     </style>
 </head>
 <body>
@@ -980,8 +1156,8 @@
         <li><a href="#contact">Контакты</a></li>
     </ul>
     <div class="nav-right">
-        <a href="tel:+71234567890" class="nav-phone">+7 (123) 456-78-90</a>
-        <a href="#contact" class="btn btn-gold btn-sm">Оставить заявку</a>
+        <a href="tel:+375291111111" class="nav-phone">+375 (29) 111-11-11</a>
+        <a href="tel:+375291111111" class="btn btn-gold btn-sm">Позвонить</a>
     </div>
     <div class="burger" id="burger" onclick="toggleMenu()">
         <span></span><span></span><span></span>
@@ -1001,7 +1177,7 @@
         <p class="hero-sub">Ваш автомобиль — наше искусство.<br>Каждый экземпляр тщательно отобран и проверен.</p>
         <div class="hero-actions">
             <a href="#catalog" class="btn btn-gold">Смотреть каталог</a>
-            <a href="#contact" class="btn btn-outline">Заказать звонок</a>
+            <a href="#contact" class="btn btn-outline">Связаться с нами</a>
         </div>
     </div>
     <div class="hero-scroll-hint">Scroll</div>
@@ -1046,12 +1222,10 @@
                 <p>Галерея Авто — это не просто автосалон. Это место, где каждый автомобиль проходит многоступенчатую проверку, а каждый клиент получает индивидуальный подход и полную прозрачность сделки.</p>
                 <p>Мы работаем только с проверенными экземплярами: тщательно изучаем историю, техническое состояние и юридическую чистоту каждого автомобиля до того, как он попадёт в наш каталог.</p>
                 <div class="about-features">
-                    <div class="about-feature">Проверка по базам данных</div>
-                    <div class="about-feature">Юридическая чистота</div>
-                    <div class="about-feature">150-точечная диагностика</div>
-                    <div class="about-feature">Гарантия 1 год</div>
-                    <div class="about-feature">Помощь с кредитом</div>
-                    <div class="about-feature">Trade-in</div>
+                    <div class="about-feature">Авто под заказ из-за рубежа</div>
+                    <div class="about-feature">Комиссионная продажа</div>
+                    <div class="about-feature">Кредит и лизинг</div>
+                    <div class="about-feature">Trade-in / Обмен</div>
                 </div>
             </div>
         </div>
@@ -1068,7 +1242,7 @@
             </div>
             <a href="#contact" class="btn btn-outline">Весь каталог →</a>
         </div>
-        <div class="cars-grid">
+        <div class="cars-grid" id="carsGrid">
 
             <!-- BMW -->
             <div class="car-card fade-up">
@@ -1284,42 +1458,42 @@
                     <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
                 </div>
                 <h3 class="adv-title">Юридическая чистота</h3>
-                <p class="adv-text">Каждый автомобиль проверяется по всем базам данных. Никаких скрытых обременений, залогов и ограничений на сделку.</p>
+                <p class="adv-text">Каждый автомобиль проверяется по всем базам данных. Никаких скрытых обременений, залогов и ограничений на регистрацию.</p>
             </div>
             <div class="adv-card fade-up">
                 <div class="adv-icon">
                     <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><circle cx="12" cy="12" r="3"/></svg>
                 </div>
                 <h3 class="adv-title">Технический осмотр</h3>
-                <p class="adv-text">150-точечная диагностика на профессиональном оборудовании. Полный технический отчёт — в подарок каждому покупателю.</p>
+                <p class="adv-text">Внимательно осматриваем каждый автомобиль перед продажей. Полный технический отчёт прилагается к каждой сделке.</p>
+            </div>
+            <div class="adv-card fade-up">
+                <div class="adv-icon">
+                    <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                </div>
+                <h3 class="adv-title">Проверка по базам данных</h3>
+                <p class="adv-text">История ДТП, залоги, ограничения и полная история пробега. Вы получаете исчерпывающую информацию об автомобиле до покупки.</p>
+            </div>
+            <div class="adv-card fade-up">
+                <div class="adv-icon">
+                    <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                </div>
+                <h3 class="adv-title">Самостоятельная проверка</h3>
+                <p class="adv-text">Предоставляем покупателю современное диагностическое оборудование для самостоятельной проверки автомобиля прямо в нашем салоне.</p>
             </div>
             <div class="adv-card fade-up">
                 <div class="adv-icon">
                     <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
                 </div>
-                <h3 class="adv-title">Кредит от 4,9%</h3>
-                <p class="adv-text">Сотрудничаем с ведущими банками. Одобрение кредита за 1 час прямо в салоне. Первоначальный взнос от 0%.</p>
+                <h3 class="adv-title">Кредит и лизинг</h3>
+                <p class="adv-text">Сотрудничаем со всеми банками и лизинговыми компаниями. Одобрение прямо в салоне в течение часа. Подберём оптимальные условия под ваш бюджет.</p>
             </div>
             <div class="adv-card fade-up">
                 <div class="adv-icon">
                     <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
                 </div>
-                <h3 class="adv-title">Trade-in</h3>
-                <p class="adv-text">Обменяйте свой автомобиль на любой из каталога. Честная оценка за 30 минут. Разница засчитывается в счёт покупки.</p>
-            </div>
-            <div class="adv-card fade-up">
-                <div class="adv-icon">
-                    <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                </div>
-                <h3 class="adv-title">Доставка по России</h3>
-                <p class="adv-text">Доставим выбранный автомобиль в любой город страны. Полное страхование груза включено в стоимость доставки.</p>
-            </div>
-            <div class="adv-card fade-up">
-                <div class="adv-icon">
-                    <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/></svg>
-                </div>
-                <h3 class="adv-title">Гарантия 1 год</h3>
-                <p class="adv-text">Предоставляем официальную гарантию на все автомобили. При возникновении неисправностей — полный ремонт за наш счёт.</p>
+                <h3 class="adv-title">Trade-in / Обмен</h3>
+                <p class="adv-text">Обменяйте свой автомобиль на любой из каталога или на подобранный нашими специалистами из-за рубежа. Честная оценка без скрытых вычетов.</p>
             </div>
         </div>
     </div>
@@ -1330,46 +1504,44 @@
     <div class="container">
         <div class="import-grid">
             <div>
-                <div class="section-tag">Эксклюзивная услуга</div>
-                <h2 class="section-title">Авто под заказ <br><em style="font-style:italic; color:var(--gold)">из-за рубежа</em></h2>
-                <p class="section-subtitle">Не нашли нужный автомобиль в каталоге? Мы пригоним его из любой страны мира — с полным сопровождением от подбора до передачи ключей.</p>
+                <div class="section-tag">Авто под заказ</div>
+                <h2 class="section-title">Привезём любой автомобиль <br><em style="font-style:italic; color:var(--gold)">из-за рубежа</em></h2>
+                <p class="section-subtitle">Не нашли нужный автомобиль в каталоге? Полностью берём на себя сопровождение по покупке, международной перевозке, страхованию и таможенному оформлению до постановки на учёт.</p>
                 <div class="import-steps">
                     <div class="import-step fade-up">
                         <div class="step-num">01</div>
                         <div>
                             <div class="step-title">Подбор и согласование</div>
-                            <p class="step-desc">Обсуждаем пожелания, бюджет и сроки. Находим лучшие варианты на международных аукционах и у официальных дилеров.</p>
+                            <p class="step-desc">Обсуждаем пожелания, бюджет и сроки. Находим лучшие варианты на международных аукционах и у официальных дилеров в любой стране.</p>
                         </div>
                     </div>
                     <div class="import-step fade-up">
                         <div class="step-num">02</div>
                         <div>
                             <div class="step-title">Покупка и логистика</div>
-                            <p class="step-desc">Полностью берём на себя покупку, международную перевозку, страхование и таможенное оформление.</p>
+                            <p class="step-desc">Полностью берём на себя покупку, международную перевозку, страхование и таможенное оформление до постановки на учёт.</p>
                         </div>
                     </div>
                     <div class="import-step fade-up">
                         <div class="step-num">03</div>
                         <div>
-                            <div class="step-title">Передача ключей</div>
-                            <p class="step-desc">Автомобиль прошёл все проверки и готов к регистрации. Вы получаете ключи и полный пакет документов.</p>
+                            <div class="step-title">Постановка на учёт</div>
+                            <p class="step-desc">Автомобиль проходит все проверки и готов к регистрации. Вы получаете полный пакет документов для самостоятельной постановки на учёт.</p>
                         </div>
                     </div>
                 </div>
                 <div class="import-cta-box">
-                    <p>Среднее время доставки — <strong style="color:var(--text);">45–60 дней</strong>. Работаем с Германией, Японией, Кореей, США, ОАЭ и другими странами. Все таможенные расходы включены в итоговую цену.</p>
-                    <a href="#contact" class="btn btn-gold">Оставить заявку на подбор</a>
+                    <p>Берём на себя полное сопровождение — от поиска до постановки на учёт. Работаем с Германией, Японией, Кореей, США, ОАЭ, Великобританией и другими странами.</p>
+                    <a href="#contact" class="btn btn-gold">Узнать подробнее</a>
                 </div>
             </div>
             <div class="import-visual fade-up">
                 <img src="https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?w=900&q=80" alt="Импорт автомобилей" class="import-img">
                 <div class="import-countries">
-                    <div class="import-country"><span class="flag">🇩🇪</span> Германия</div>
-                    <div class="import-country"><span class="flag">🇯🇵</span> Япония</div>
-                    <div class="import-country"><span class="flag">🇰🇷</span> Корея</div>
-                    <div class="import-country"><span class="flag">🇺🇸</span> США</div>
-                    <div class="import-country"><span class="flag">🇦🇪</span> ОАЭ</div>
-                    <div class="import-country"><span class="flag">🇬🇧</span> Великобритания</div>
+                    <div class="import-country"><img class="flag" src="https://flagcdn.com/w40/us.png" alt="США"> США</div>
+                    <div class="import-country"><img class="flag" src="https://flagcdn.com/w40/cn.png" alt="Китай"> Китай</div>
+                    <div class="import-country"><img class="flag" src="https://flagcdn.com/w40/kr.png" alt="Корея"> Корея</div>
+                    <div class="import-country"><img class="flag" src="https://flagcdn.com/w40/eu.png" alt="Европа"> Европа</div>
                 </div>
             </div>
         </div>
@@ -1428,14 +1600,14 @@
             <div class="contact-info">
                 <div class="section-tag">Контакты</div>
                 <h2 class="section-title">Свяжитесь<br>с нами</h2>
-                <p class="section-subtitle" style="margin-bottom:2.75rem;">Оставьте заявку — менеджер перезвонит в течение 15 минут.</p>
+                <p class="section-subtitle" style="margin-bottom:2.75rem;">Свяжитесь с нами любым удобным способом — ответим в течение 15 минут.</p>
                 <div class="contact-item fade-up">
                     <div class="contact-icon">
                         <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
                     </div>
                     <div>
                         <div class="contact-label">Телефон</div>
-                        <div class="contact-value"><a href="tel:+71234567890">+7 (123) 456-78-90</a></div>
+                        <div class="contact-value"><a href="tel:+375291111111">+375 (29) 111-11-11</a></div>
                     </div>
                 </div>
                 <div class="contact-item fade-up">
@@ -1444,7 +1616,7 @@
                     </div>
                     <div>
                         <div class="contact-label">Email</div>
-                        <div class="contact-value"><a href="mailto:info@galereya-avto.ru">info@galereya-avto.ru</a></div>
+                        <div class="contact-value"><a href="mailto:galereya.auto@gmail.com">galereya.auto@gmail.com</a></div>
                     </div>
                 </div>
                 <div class="contact-item fade-up">
@@ -1453,7 +1625,7 @@
                     </div>
                     <div>
                         <div class="contact-label">Адрес</div>
-                        <div class="contact-value">г. Москва, ул. Автомобильная, 15</div>
+                        <div class="contact-value">г. Минск, ул. Тимирязева, 127<br><small style="color:var(--text-muted)">ТЦ Радимаркет, 4 этаж паркинга</small></div>
                     </div>
                 </div>
                 <div class="contact-item fade-up">
@@ -1462,45 +1634,53 @@
                     </div>
                     <div>
                         <div class="contact-label">Режим работы</div>
-                        <div class="contact-value">Пн–Вс: 9:00 – 21:00</div>
+                        <div class="contact-value">Ежедневно 9:00 – 19:00</div>
                     </div>
                 </div>
             </div>
 
             <div class="fade-up">
-                <div class="form-wrap">
-                    <h3>Оставить заявку</h3>
-                    <form id="contactForm" onsubmit="handleSubmit(event)">
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label class="form-label">Имя</label>
-                                <input type="text" class="form-input" placeholder="Ваше имя" required>
+                <div class="social-contact-wrap">
+                    <h3 class="social-contact-title">Мы в социальных сетях</h3>
+                    <p class="social-contact-sub">Публикуем новые поступления, видеообзоры и специальные предложения первыми</p>
+                    <div class="social-cards-grid">
+                        <a href="#" class="soc-card" target="_blank" rel="noopener noreferrer">
+                            <div class="soc-icon youtube">
+                                <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
                             </div>
-                            <div class="form-group">
-                                <label class="form-label">Телефон</label>
-                                <input type="tel" class="form-input" placeholder="+7 (___) ___-__-__" required>
+                            <div>
+                                <div class="soc-name">YouTube</div>
+                                <div class="soc-handle">Галерея Авто</div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Тема обращения</label>
-                            <select class="form-select">
-                                <option value="">Выберите тему</option>
-                                <option>Покупка автомобиля из каталога</option>
-                                <option>Заказ авто из-за рубежа</option>
-                                <option>Trade-in</option>
-                                <option>Кредит и рассрочка</option>
-                                <option>Другое</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Сообщение</label>
-                            <textarea class="form-textarea" placeholder="Расскажите, какой автомобиль вас интересует..."></textarea>
-                        </div>
-                        <button type="submit" class="btn btn-gold" style="width:100%; justify-content:center; padding:1rem 1.75rem;">
-                            Отправить заявку
-                        </button>
-                        <p class="form-note">Нажимая кнопку, вы соглашаетесь с политикой конфиденциальности</p>
-                    </form>
+                        </a>
+                        <a href="#" class="soc-card" target="_blank" rel="noopener noreferrer">
+                            <div class="soc-icon tiktok">
+                                <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
+                            </div>
+                            <div>
+                                <div class="soc-name">TikTok</div>
+                                <div class="soc-handle">@galereya_avto</div>
+                            </div>
+                        </a>
+                        <a href="#" class="soc-card" target="_blank" rel="noopener noreferrer">
+                            <div class="soc-icon telegram">
+                                <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M11.944 0A12 12 0 000 12a12 12 0 0012 12 12 12 0 0012-12A12 12 0 0012 0a12 12 0 00-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 01.171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+                            </div>
+                            <div>
+                                <div class="soc-name">Telegram</div>
+                                <div class="soc-handle">@galereya_avto</div>
+                            </div>
+                        </a>
+                        <a href="#" class="soc-card" target="_blank" rel="noopener noreferrer">
+                            <div class="soc-icon instagram">
+                                <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+                            </div>
+                            <div>
+                                <div class="soc-name">Instagram</div>
+                                <div class="soc-handle">@galereya_avto</div>
+                            </div>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1511,16 +1691,17 @@
 <section id="map-section">
     <div class="map-container">
         <iframe
-            src="https://www.openstreetmap.org/export/embed.html?bbox=37.55,55.73,37.65,55.78&layer=mapnik"
-            title="Карта"
+            src="https://www.openstreetmap.org/export/embed.html?bbox=27.432,53.931,27.456,53.945&layer=mapnik&marker=53.9381,27.4439"
+            title="Галерея Авто на карте"
             loading="lazy">
         </iframe>
         <div class="map-card">
             <div class="map-logo">Галерея Авто</div>
-            <div class="map-info-line">📍 ул. Автомобильная, 15</div>
-            <div class="map-info-line">📞 +7 (123) 456-78-90</div>
-            <div class="map-info-line">🕐 Пн–Вс: 9:00 – 21:00</div>
-            <a href="#contact" class="btn btn-gold btn-sm" style="margin-top:1rem; display:inline-flex;">Как доехать</a>
+            <div class="map-info-line">📍 ул. Тимирязева, 127, ТЦ Радимаркет</div>
+            <div class="map-info-line">🏢 4 этаж паркинга</div>
+            <div class="map-info-line">📞 +375 (29) 111-11-11</div>
+            <div class="map-info-line">🕐 Ежедневно 9:00 – 19:00</div>
+            <a href="https://maps.openstreetmap.org/?mlat=53.9381&mlon=27.4439#map=16/53.9381/27.4439" target="_blank" class="btn btn-gold btn-sm" style="margin-top:1rem; display:inline-flex;">Построить маршрут</a>
         </div>
     </div>
 </section>
@@ -1544,10 +1725,10 @@
         <div class="footer-col">
             <h5>Услуги</h5>
             <ul>
-                <li><a href="#import">Авто из-за рубежа</a></li>
-                <li><a href="#">Trade-in</a></li>
-                <li><a href="#">Кредит</a></li>
-                <li><a href="#">Доставка</a></li>
+                <li><a href="#import">Авто под заказ</a></li>
+                <li><a href="#advantages">Trade-in / Обмен</a></li>
+                <li><a href="#advantages">Кредит и лизинг</a></li>
+                <li><a href="#catalog">Комиссионная продажа</a></li>
             </ul>
         </div>
         <div class="footer-col">
@@ -1560,11 +1741,20 @@
         </div>
     </div>
     <div class="footer-bottom">
-        <p class="footer-copyright">© 2024 Галерея Авто. Все права защищены.</p>
+        <p class="footer-copyright">© 2025 Галерея Авто. Все права защищены.</p>
         <div class="social-links">
-            <a href="#" class="social-link" title="VK">В</a>
-            <a href="#" class="social-link" title="Telegram">Т</a>
-            <a href="#" class="social-link" title="WhatsApp">W</a>
+            <a href="#" class="social-link" title="YouTube" target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+            </a>
+            <a href="#" class="social-link" title="TikTok" target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
+            </a>
+            <a href="#" class="social-link" title="Telegram" target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M11.944 0A12 12 0 000 12a12 12 0 0012 12 12 12 0 0012-12A12 12 0 0012 0a12 12 0 00-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 01.171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+            </a>
+            <a href="#" class="social-link" title="Instagram" target="_blank" rel="noopener">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+            </a>
         </div>
     </div>
 </footer>
@@ -1579,14 +1769,110 @@
     </div>
 </div>
 
+<script src="catalog.js"></script>
 <script>
-    // Navbar scroll
+    // ── Catalog Rendering ──
+    const FALLBACK_IMG = 'https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=800&q=60';
+
+    function renderCatalog() {
+        const grid = document.getElementById('carsGrid');
+        if (!grid || typeof CATALOG === 'undefined') return;
+
+        grid.innerHTML = CATALOG.map(car => {
+            const photos = (car.photos && car.photos.length > 0) ? car.photos : [FALLBACK_IMG];
+            const hasMany = photos.length > 1;
+
+            const slidesHTML = photos.map(p =>
+                `<img src="${p}" alt="${car.name}" class="carousel-slide" loading="lazy" onerror="this.src='${FALLBACK_IMG}'">`
+            ).join('');
+
+            const dotsHTML = hasMany
+                ? `<div class="carousel-dots">${photos.map((_, i) =>
+                    `<button class="carousel-dot${i === 0 ? ' active' : ''}" aria-label="Фото ${i + 1}"></button>`
+                ).join('')}</div>`
+                : '';
+
+            const btnsHTML = hasMany
+                ? `<button class="carousel-btn carousel-prev" aria-label="Предыдущее">&#8249;</button>` +
+                  `<button class="carousel-btn carousel-next" aria-label="Следующее">&#8250;</button>`
+                : '';
+
+            return `<div class="car-card fade-up">
+                <div class="car-img-wrap">
+                    <div class="carousel-wrapper">
+                        <div class="carousel-track">${slidesHTML}</div>
+                        ${btnsHTML}
+                        ${dotsHTML}
+                    </div>
+                    ${car.badge ? `<div class="car-badge"${car.badgeColor ? ` style="background:${car.badgeColor}"` : ''}>${car.badge}</div>` : ''}
+                </div>
+                <div class="car-body">
+                    <div class="car-name">${car.name}</div>
+                    <div class="car-meta">${car.year} год · ${car.origin}</div>
+                    <div class="car-specs">
+                        <div class="car-spec">
+                            <svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                            ${car.engine}
+                        </div>
+                        <div class="car-spec">
+                            <svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+                            ${car.mileage}
+                        </div>
+                        <div class="car-spec">
+                            <svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/></svg>
+                            ${car.transmission}
+                        </div>
+                    </div>
+                    ${car.description ? `<p class="car-description">${car.description}</p>` : ''}
+                    <div class="car-footer">
+                        <div>
+                            <div class="car-price">${car.price}</div>
+                            ${car.priceNote ? `<div class="car-price-note">${car.priceNote}</div>` : ''}
+                        </div>
+                        <a href="#contact" class="btn btn-gold btn-sm">Подробнее</a>
+                    </div>
+                </div>
+            </div>`;
+        }).join('');
+    }
+
+    // ── Carousel ──
+    function initCarousels() {
+        document.querySelectorAll('.carousel-wrapper').forEach(wrapper => {
+            const track = wrapper.querySelector('.carousel-track');
+            const slides = wrapper.querySelectorAll('.carousel-slide');
+            if (slides.length <= 1) return;
+
+            const dots = wrapper.querySelectorAll('.carousel-dot');
+            const prevBtn = wrapper.querySelector('.carousel-prev');
+            const nextBtn = wrapper.querySelector('.carousel-next');
+            let cur = 0, startX = 0;
+
+            function go(n) {
+                cur = (n + slides.length) % slides.length;
+                track.style.transform = `translateX(-${cur * 100}%)`;
+                dots.forEach((d, i) => d.classList.toggle('active', i === cur));
+            }
+
+            if (prevBtn) prevBtn.addEventListener('click', e => { e.preventDefault(); e.stopPropagation(); go(cur - 1); });
+            if (nextBtn) nextBtn.addEventListener('click', e => { e.preventDefault(); e.stopPropagation(); go(cur + 1); });
+            dots.forEach((d, i) => d.addEventListener('click', e => { e.stopPropagation(); go(i); }));
+
+            track.addEventListener('touchstart', e => { startX = e.touches[0].clientX; }, { passive: true });
+            track.addEventListener('touchend', e => {
+                const diff = startX - e.changedTouches[0].clientX;
+                if (Math.abs(diff) > 40) go(diff > 0 ? cur + 1 : cur - 1);
+            }, { passive: true });
+        });
+    }
+
+    // ── Navbar scroll ──
     const navbar = document.getElementById('navbar');
     window.addEventListener('scroll', () => {
         navbar.classList.toggle('scrolled', window.scrollY > 60);
     });
 
-    // Parallax hero
+    // ── Parallax hero ──
     const heroBg = document.getElementById('heroBg');
     window.addEventListener('scroll', () => {
         if (window.scrollY < window.innerHeight) {
@@ -1594,13 +1880,17 @@
         }
     }, { passive: true });
 
-    // Scroll animations
+    // ── Render catalog + init carousels, then set up scroll observer ──
+    renderCatalog();
+    initCarousels();
+
+    // ── Scroll animations ──
     const observer = new IntersectionObserver(entries => {
         entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
     }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
     document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
 
-    // Animated counters
+    // ── Animated counters ──
     const countObserver = new IntersectionObserver(entries => {
         entries.forEach(entry => {
             if (!entry.isIntersecting) return;
@@ -1620,12 +1910,7 @@
     }, { threshold: 0.6 });
     document.querySelectorAll('.stat-number').forEach(el => countObserver.observe(el));
 
-    // Form submit
-    function handleSubmit(e) {
-        e.preventDefault();
-        document.getElementById('modal').classList.add('open');
-        e.target.reset();
-    }
+    // ── Modal (kept for safety) ──
     function closeModal() {
         document.getElementById('modal').classList.remove('open');
     }
@@ -1633,21 +1918,25 @@
         if (e.target === this) closeModal();
     });
 
-    // Mobile menu
+    // ── Mobile menu ──
     function toggleMenu() {
         const links = document.getElementById('navLinks');
+        const burger = document.getElementById('burger');
         const isOpen = links.classList.toggle('mobile-open');
-        Object.assign(links.style, isOpen ? {
-            display: 'flex', flexDirection: 'column', position: 'absolute',
-            top: '100%', left: '0', right: '0', gap: '0',
-            background: 'rgba(10,10,10,0.98)', borderBottom: '1px solid var(--border)',
-            padding: '0.5rem 0'
-        } : { display: '' });
-        links.querySelectorAll('a').forEach(a => {
-            a.style.padding = isOpen ? '0.875rem 2rem' : '';
-            a.style.borderBottom = isOpen ? '1px solid var(--border)' : '';
-        });
+        burger.classList.toggle('open', isOpen);
+        document.body.style.overflow = isOpen ? 'hidden' : '';
     }
+    document.querySelectorAll('#navLinks a').forEach(a => {
+        a.addEventListener('click', () => {
+            const links = document.getElementById('navLinks');
+            const burger = document.getElementById('burger');
+            if (links.classList.contains('mobile-open')) {
+                links.classList.remove('mobile-open');
+                burger.classList.remove('open');
+                document.body.style.overflow = '';
+            }
+        });
+    });
 </script>
 </body>
 </html>
