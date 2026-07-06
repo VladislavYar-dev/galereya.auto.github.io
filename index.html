@@ -52,15 +52,23 @@
             border-bottom: 1px solid var(--border);
         }
         .nav-logo {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--gold);
+            display: flex;
+            align-items: center;
+            gap: 0.55rem;
             text-decoration: none;
-            letter-spacing: 0.02em;
             white-space: nowrap;
         }
-        .nav-logo span { color: var(--text); }
+        .nav-logo img { height: 40px; width: auto; }
+        .nav-logo-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--gold);
+            letter-spacing: 0.02em;
+            line-height: 1.1;
+        }
+        .nav-logo-text span { color: var(--text); }
+        .nav-logo-text span { color: var(--text); }
         .nav-links {
             display: flex;
             gap: 2.5rem;
@@ -598,9 +606,9 @@
             border: 1px solid var(--border);
             border-radius: 5px;
             padding: 1.1rem 1.4rem;
-            display: flex;
-            gap: 1.25rem;
-            flex-wrap: wrap;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.7rem 1.25rem;
         }
         .import-country {
             display: flex;
@@ -1135,24 +1143,20 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: var(--bg);
-            border: 1px solid var(--border);
+            background: none;
+            border: none;
             border-radius: 12px;
-            padding: 1.25rem;
+            padding: 0.5rem;
             text-decoration: none;
-            transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+            transition: transform 0.25s, opacity 0.25s;
             aspect-ratio: 1;
             min-width: 0;
         }
-        .soc-card:hover {
-            border-color: rgba(201,168,76,0.5);
-            transform: translateY(-3px);
-            box-shadow: 0 8px 24px rgba(0,0,0,0.35);
-        }
+        .soc-card:hover { transform: translateY(-3px); opacity: 0.8; box-shadow: none; }
         .soc-icon {
-            width: 48px;
-            height: 48px;
-            border-radius: 12px;
+            width: 56px;
+            height: 56px;
+            border-radius: 14px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -1169,7 +1173,10 @@
 
 <!-- ══ NAVIGATION ══ -->
 <nav id="navbar">
-    <a href="#" class="nav-logo">Галерея<span> Авто</span></a>
+    <a href="#" class="nav-logo">
+        <img src="logo.svg" alt="Галерея Авто логотип">
+        <span class="nav-logo-text">Галерея<span> Авто</span></span>
+    </a>
     <ul class="nav-links" id="navLinks">
         <li><a href="#about">О нас</a></li>
         <li><a href="#catalog">Каталог</a></li>
